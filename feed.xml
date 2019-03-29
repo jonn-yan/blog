@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 29 Mar 2019 10:42:19 +0800</pubDate>
-    <lastBuildDate>Fri, 29 Mar 2019 10:42:19 +0800</lastBuildDate>
+    <pubDate>Fri, 29 Mar 2019 11:11:35 +0800</pubDate>
+    <lastBuildDate>Fri, 29 Mar 2019 11:11:35 +0800</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -17,9 +17,9 @@
 &lt;blockquote&gt;
   &lt;h5 id=&quot;环境说明&quot;&gt;环境说明&lt;/h5&gt;
   &lt;blockquote&gt;
-    &lt;p&gt;系统：Centos 6.5
-erlang：&amp;gt;= 19.3
-RabbitMQ：3.7.13&lt;/p&gt;
+    &lt;h5 id=&quot;系统centos-65&quot;&gt;系统：Centos 6.5&lt;/h5&gt;
+    &lt;h5 id=&quot;erlang-193&quot;&gt;erlang：&amp;gt;= 19.3&lt;/h5&gt;
+    &lt;h5 id=&quot;rabbitmq3713&quot;&gt;RabbitMQ：3.7.13&lt;/h5&gt;
   &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
@@ -44,45 +44,42 @@ RabbitMQ：3.7.13&lt;/p&gt;
   &lt;h5 id=&quot;erlang-repo&quot;&gt;Erlang repo&lt;/h5&gt;
   &lt;p&gt;/etc/yum.repos.d/rabbitmq-erlang.repo&lt;/p&gt;
   &lt;blockquote&gt;
-    &lt;p&gt;[rabbitmq-erlang]
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[rabbitmq-erlang]
 name=rabbitmq-erlang
 baseurl=http://dl.bintray.com/rabbitmq/rpm/erlang/20/el/6
 gpgcheck=0
 repo_gpgcheck=0
-enable=1&lt;/p&gt;
-  &lt;/blockquote&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;h5 id=&quot;rabbitmq-repo&quot;&gt;Rabbitmq repo&lt;/h5&gt;
-  &lt;p&gt;/etc/yum.repos.d/rabbitmq.repo&lt;/p&gt;
-  &lt;blockquote&gt;
-    &lt;p&gt;[bintray-rabbitmq-server]
+enable=1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h5 id=&quot;rabbitmq-repo&quot;&gt;Rabbitmq repo&lt;/h5&gt;
+    &lt;p&gt;/etc/yum.repos.d/rabbitmq.repo&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[bintray-rabbitmq-server]
 name=bintray-rabbitmq-rpm
 baseurl=http://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/6/
 gpgcheck=0
 repo_gpgcheck=0
-enabled=1&lt;/p&gt;
+enabled=1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
 &lt;h4 id=&quot;验证-yum-源并执行安装&quot;&gt;验证 YUM 源并执行安装&lt;/h4&gt;
 &lt;blockquote&gt;
-  &lt;h5 id=&quot;验证-erlang&quot;&gt;验证 Erlang&lt;/h5&gt;
+  &lt;h4 id=&quot;验证-erlang&quot;&gt;验证 Erlang&lt;/h4&gt;
   &lt;p&gt;yum list | grep erlang&lt;/p&gt;
   &lt;blockquote&gt;
     &lt;p&gt;&lt;img src=&quot;/blog/image/2019-03-29-rabbitmq-1-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-    &lt;h5 id=&quot;安装-erlang&quot;&gt;安装 Erlang&lt;/h5&gt;
+    &lt;h4 id=&quot;安装-erlang&quot;&gt;安装 Erlang&lt;/h4&gt;
     &lt;p&gt;yum install -y erlang.x86_64&lt;/p&gt;
   &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
 &lt;blockquote&gt;
-  &lt;h5 id=&quot;验证-rabbitmq&quot;&gt;验证 Rabbitmq&lt;/h5&gt;
+  &lt;h4 id=&quot;验证-rabbitmq&quot;&gt;验证 Rabbitmq&lt;/h4&gt;
   &lt;p&gt;yum list | grep rabbitmq&lt;/p&gt;
   &lt;blockquote&gt;
     &lt;p&gt;&lt;img src=&quot;/blog/image/2019-03-29-rabbitmq-1-2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-    &lt;h5 id=&quot;安装rabbitmq&quot;&gt;安装Rabbitmq&lt;/h5&gt;
+    &lt;h4 id=&quot;安装rabbitmq&quot;&gt;安装Rabbitmq&lt;/h4&gt;
     &lt;p&gt;yum install -y rabbitmq-server.noarch&lt;/p&gt;
   &lt;/blockquote&gt;
 &lt;/blockquote&gt;
@@ -98,25 +95,25 @@ enabled=1&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;blockquote&gt;
-  &lt;h5 id=&quot;其中web_stomp和stomp插件官网介绍如下推荐开启&quot;&gt;其中web_stomp和stomp插件官网介绍如下（推荐开启）：&lt;/h5&gt;
+  &lt;h4 id=&quot;其中web_stomp和stomp插件官网介绍如下推荐开启&quot;&gt;其中web_stomp和stomp插件官网介绍如下（推荐开启）：&lt;/h4&gt;
   &lt;blockquote&gt;
-    &lt;p&gt;rabbitmq_web_stomp
-https://www.rabbitmq.com/web-stomp.html
-rabbitmq_stomp
-https://www.rabbitmq.com/stomp.html&lt;/p&gt;
+    &lt;h5 id=&quot;rabbitmq_web_stomp&quot;&gt;rabbitmq_web_stomp&lt;/h5&gt;
+    &lt;h5 id=&quot;httpswwwrabbitmqcomweb-stomphtml&quot;&gt;https://www.rabbitmq.com/web-stomp.html&lt;/h5&gt;
+    &lt;h5 id=&quot;rabbitmq_stomp&quot;&gt;rabbitmq_stomp&lt;/h5&gt;
+    &lt;h5 id=&quot;httpswwwrabbitmqcomstomphtml&quot;&gt;https://www.rabbitmq.com/stomp.html&lt;/h5&gt;
   &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
 &lt;blockquote&gt;
-  &lt;h5 id=&quot;登陆mq&quot;&gt;登陆MQ&lt;/h5&gt;
-  &lt;p&gt;开启管理插件后，会看到有 15672 端口被监听&lt;/p&gt;
+  &lt;h4 id=&quot;登陆mq&quot;&gt;登陆MQ&lt;/h4&gt;
+  &lt;h5 id=&quot;开启管理插件后会看到有-15672-端口被监听&quot;&gt;开启管理插件后，会看到有 15672 端口被监听&lt;/h5&gt;
   &lt;blockquote&gt;
     &lt;p&gt;netstat -tunlp 查看端口
 &lt;img src=&quot;/blog/image/2019-03-29-rabbitmq-1-3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
     &lt;h5 id=&quot;访问-15672-端口&quot;&gt;访问 15672 端口&lt;/h5&gt;
     &lt;p&gt;http://10.100.24.51:15672/#/users
 &lt;img src=&quot;/blog/image/2019-03-29-rabbitmq-1-4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-    &lt;h5 id=&quot;使用默认用户-guest密码guest登陆&quot;&gt;使用默认用户： guest（密码：guest）登陆&lt;/h5&gt;
+    &lt;h4 id=&quot;使用默认用户-guest密码guest登陆&quot;&gt;使用默认用户： guest（密码：guest）登陆&lt;/h4&gt;
     &lt;p&gt;报错 User can only log in via localhost 
 &lt;img src=&quot;/blog/image/2019-03-29-rabbitmq-1-5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
     &lt;h5 id=&quot;这个报错是因为新版本对-guest-用户做了限制只允许从localhost即服务器本地登陆官方解释httpswwwrabbitmqcomaccess-controlhtml&quot;&gt;这个报错是因为新版本对 guest 用户做了限制，只允许从localhost（即服务器本地登陆），官方解释：https://www.rabbitmq.com/access-control.html&lt;/h5&gt;

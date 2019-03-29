@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 29 Mar 2019 10:19:55 +0800</pubDate>
-    <lastBuildDate>Fri, 29 Mar 2019 10:19:55 +0800</lastBuildDate>
+    <pubDate>Fri, 29 Mar 2019 10:24:48 +0800</pubDate>
+    <lastBuildDate>Fri, 29 Mar 2019 10:24:48 +0800</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -71,7 +71,7 @@ enabled=1&lt;/p&gt;
   &lt;h5 id=&quot;验证-erlang&quot;&gt;验证 Erlang&lt;/h5&gt;
   &lt;p&gt;yum list | grep erlang&lt;/p&gt;
   &lt;blockquote&gt;
-    &lt;p&gt;![/blog/image/2019-03-29-rabbitmq-1-1.png]&lt;/p&gt;
+    &lt;p&gt;&lt;img src=&quot;en-resource:/blog/image/2019-03-29-rabbitmq-1-1.png&quot; alt=&quot;/blog/image/2019-03-29-rabbitmq-1-1.png&quot; /&gt;&lt;/p&gt;
     &lt;h5 id=&quot;安装-erlang&quot;&gt;安装 Erlang&lt;/h5&gt;
     &lt;p&gt;yum install -y erlang.x86_64&lt;/p&gt;
   &lt;/blockquote&gt;

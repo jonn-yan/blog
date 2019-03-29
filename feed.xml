@@ -6,9 +6,141 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 28 Mar 2019 15:58:31 +0800</pubDate>
-    <lastBuildDate>Thu, 28 Mar 2019 15:58:31 +0800</lastBuildDate>
+    <pubDate>Fri, 29 Mar 2019 10:11:31 +0800</pubDate>
+    <lastBuildDate>Fri, 29 Mar 2019 10:11:31 +0800</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
+    
+      <item>
+        <title>Rabbitmq 单节点部署笔记</title>
+        <description>&lt;h2 id=&quot;rabbitmq-单节点部署笔记&quot;&gt;Rabbitmq 单节点部署笔记&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;环境说明&quot;&gt;环境说明&lt;/h5&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;系统：Centos 6.5
+erlang：&amp;gt;= 19.3
+RabbitMQ：3.7.13&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;rabbit官网地址&quot;&gt;Rabbit官网地址&lt;/h5&gt;
+  &lt;blockquote&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://www.rabbitmq.com/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;erlang官方地址&quot;&gt;Erlang官方地址&lt;/h5&gt;
+  &lt;blockquote&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://www.erlang.org/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;配置-yum-源&quot;&gt;配置 YUM 源&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;erlang-repo&quot;&gt;Erlang repo&lt;/h5&gt;
+  &lt;p&gt;/etc/yum.repos.d/rabbitmq-erlang.repo&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;[rabbitmq-erlang]
+name=rabbitmq-erlang
+baseurl=http://dl.bintray.com/rabbitmq/rpm/erlang/20/el/6
+gpgcheck=0
+repo_gpgcheck=0
+enable=1&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;rabbitmq-repo&quot;&gt;Rabbitmq repo&lt;/h5&gt;
+  &lt;p&gt;/etc/yum.repos.d/rabbitmq.repo&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;[bintray-rabbitmq-server]
+name=bintray-rabbitmq-rpm
+baseurl=http://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/6/
+gpgcheck=0
+repo_gpgcheck=0
+enabled=1&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;验证-yum-源并执行安装&quot;&gt;验证 YUM 源并执行安装&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;验证-erlang&quot;&gt;验证 Erlang&lt;/h5&gt;
+  &lt;p&gt;yum list | grep erlang&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;&lt;img src=&quot;en-resource://database/4088:1&quot; alt=&quot;6560f526e05ff70f4fb1c7c030fda9ac.png&quot; /&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;安装-erlang&quot;&gt;安装 Erlang&lt;/h5&gt;
+    &lt;p&gt;yum install -y erlang.x86_64&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;验证-rabbitmq&quot;&gt;验证 Rabbitmq&lt;/h5&gt;
+  &lt;p&gt;yum list | grep rabbitmq&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;&lt;img src=&quot;en-resource://database/4090:1&quot; alt=&quot;776092cd9a7ef0abc77e849cf1e2c98f.png&quot; /&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;安装rabbitmq&quot;&gt;安装Rabbitmq&lt;/h5&gt;
+    &lt;p&gt;yum install -y rabbitmq-server.noarch&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;启动与登陆&quot;&gt;启动与登陆&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;启动mq&quot;&gt;启动MQ&lt;/h5&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;/etc/init.d/rabbitmq-server start&lt;/p&gt;
+    &lt;h5 id=&quot;启动管理插件&quot;&gt;启动管理插件&lt;/h5&gt;
+    &lt;p&gt;rabbitmq-plugins enable rabbitmq_management rabbitmq_web_stomp rabbitmq_stomp&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;其中web_stomp和stomp插件官网介绍如下推荐开启&quot;&gt;其中web_stomp和stomp插件官网介绍如下（推荐开启）：&lt;/h5&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;rabbitmq_web_stomp
+https://www.rabbitmq.com/web-stomp.html
+rabbitmq_stomp
+https://www.rabbitmq.com/stomp.html&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;登陆mq&quot;&gt;登陆MQ&lt;/h5&gt;
+  &lt;p&gt;开启管理插件后，会看到有 15672 端口被监听&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;netstat -tunlp 查看端口
+&lt;img src=&quot;en-resource://database/4092:0&quot; alt=&quot;d750418ddcb56396b55f247d239cfcba.png&quot; /&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;访问-15672-端口&quot;&gt;访问 15672 端口&lt;/h5&gt;
+    &lt;p&gt;http://10.100.24.51:15672/#/users
+&lt;img src=&quot;en-resource://database/4094:0&quot; alt=&quot;9ef92115a54422d00c47e7826991fbd0.png&quot; /&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;使用默认用户-guest密码guest登陆&quot;&gt;使用默认用户： guest（密码：guest）登陆&lt;/h5&gt;
+    &lt;p&gt;报错 User can only log in via localhost 
+&lt;img src=&quot;en-resource://database/4096:0&quot; alt=&quot;d9798db8f44cef2ca8b21979fe7ac159.png&quot; /&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;这个报错是因为新版本对-guest-用户做了限制只允许从localhost即服务器本地登陆官方解释httpswwwrabbitmqcomaccess-controlhtml&quot;&gt;这个报错是因为新版本对 guest 用户做了限制，只允许从localhost（即服务器本地登陆），官方解释：https://www.rabbitmq.com/access-control.html&lt;/h5&gt;
+    &lt;p&gt;&lt;img src=&quot;en-resource://database/4100:1&quot; alt=&quot;a2bcd0ca52e75a4fb0a7fcca8af9c7b3.png&quot; /&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;可以通过修改配置文件开启远程访问&quot;&gt;可以通过修改配置文件开启远程访问&lt;/h5&gt;
+    &lt;p&gt;&lt;img src=&quot;en-resource://database/4102:0&quot; alt=&quot;0515a8483edafb854b3f07e4e2d8f8b7.png&quot; /&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;也可通过新增管理用户的方式修改登陆用户&quot;&gt;也可通过新增管理用户的方式，修改登陆用户&lt;/h5&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rabbitmqctl add_user admin admin
+rabbitmqctl set_user_tags admin administrator
+rabbitmqctl set_permissions -p / admin '.*' '.*' '.*'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;&lt;img src=&quot;en-resource://database/4104:0&quot; alt=&quot;e345ded181b77f35aac4b4035d6c6cb1.png&quot; /&gt;&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+</description>
+        <pubDate>Fri, 29 Mar 2019 10:10:00 +0800</pubDate>
+        <link>http://localhost:4000/blog/archivers/2019-03-29-rabbitmq-1</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/archivers/2019-03-29-rabbitmq-1</guid>
+        
+        
+        <category>Rabbitmq</category>
+        
+      </item>
     
       <item>
         <title>Welcome to Jekyll and EasyBook</title>

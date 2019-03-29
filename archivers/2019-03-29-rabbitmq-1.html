@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Rabbitmq 单节点部署笔记 « Another Blog</title>
+  <meta name="description" content="Rabbitmq 单节点部署笔记  环境说明      系统：Centos 6.5erlang：&gt;= 19.3RabbitMQ：3.7.13    Rabbit官网地址      https://www.rabbitmq.com/        Erlang官方地址      http://www.erla...">
+
+  <link rel="stylesheet" href="/blog/css/main.css">
+  <link rel="canonical" href="http://localhost:4000/blog/archivers/2019-03-29-rabbitmq-1">
+  <link rel="alternate" type="application/rss+xml" title="Another Blog" href="http://localhost:4000/blog/feed.xml" />
+</head>
+
+
+  <body>
+
+    <div class="header-placeholder"></div>
+<header class="header">
+  <div class="wrapper">
+    <div id="sidebar-toggle">TOC</div>
+    <a class="site-title" href="/blog/">Another Blog</a>
+    <nav class="site-nav">
+      
+        
+        <a class="page-link" href="/blog/about/">About</a>
+      
+        
+        <a class="page-link" href="/blog/category/">Category</a>
+      
+        
+        <a class="page-link" href="/blog/donate/">Donate</a>
+      
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="col-main">
+          <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Rabbitmq 单节点部署笔记</h1>
+    <p class="post-meta">Mar 29, 2019</p>
+  </header>
+
+  <article class="post-content">
+    <h2 id="rabbitmq-单节点部署笔记">Rabbitmq 单节点部署笔记</h2>
+
+<blockquote>
+  <h5 id="环境说明">环境说明</h5>
+  <blockquote>
+    <p>系统：Centos 6.5
+erlang：&gt;= 19.3
+RabbitMQ：3.7.13</p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <h5 id="rabbit官网地址">Rabbit官网地址</h5>
+  <blockquote>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://www.rabbitmq.com/
+</code></pre></div>    </div>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <h5 id="erlang官方地址">Erlang官方地址</h5>
+  <blockquote>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://www.erlang.org/
+</code></pre></div>    </div>
+  </blockquote>
+</blockquote>
+
+<h4 id="配置-yum-源">配置 YUM 源</h4>
+<blockquote>
+  <h5 id="erlang-repo">Erlang repo</h5>
+  <p>/etc/yum.repos.d/rabbitmq-erlang.repo</p>
+  <blockquote>
+    <p>[rabbitmq-erlang]
+name=rabbitmq-erlang
+baseurl=http://dl.bintray.com/rabbitmq/rpm/erlang/20/el/6
+gpgcheck=0
+repo_gpgcheck=0
+enable=1</p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <h5 id="rabbitmq-repo">Rabbitmq repo</h5>
+  <p>/etc/yum.repos.d/rabbitmq.repo</p>
+  <blockquote>
+    <p>[bintray-rabbitmq-server]
+name=bintray-rabbitmq-rpm
+baseurl=http://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/6/
+gpgcheck=0
+repo_gpgcheck=0
+enabled=1</p>
+  </blockquote>
+</blockquote>
+
+<h4 id="验证-yum-源并执行安装">验证 YUM 源并执行安装</h4>
+<blockquote>
+  <h5 id="验证-erlang">验证 Erlang</h5>
+  <p>yum list | grep erlang</p>
+  <blockquote>
+    <p><img src="en-resource://database/4088:1" alt="6560f526e05ff70f4fb1c7c030fda9ac.png" /></p>
+    <h5 id="安装-erlang">安装 Erlang</h5>
+    <p>yum install -y erlang.x86_64</p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <h5 id="验证-rabbitmq">验证 Rabbitmq</h5>
+  <p>yum list | grep rabbitmq</p>
+  <blockquote>
+    <p><img src="en-resource://database/4090:1" alt="776092cd9a7ef0abc77e849cf1e2c98f.png" /></p>
+    <h5 id="安装rabbitmq">安装Rabbitmq</h5>
+    <p>yum install -y rabbitmq-server.noarch</p>
+  </blockquote>
+</blockquote>
+
+<h4 id="启动与登陆">启动与登陆</h4>
+<blockquote>
+  <h5 id="启动mq">启动MQ</h5>
+  <blockquote>
+    <p>/etc/init.d/rabbitmq-server start</p>
+    <h5 id="启动管理插件">启动管理插件</h5>
+    <p>rabbitmq-plugins enable rabbitmq_management rabbitmq_web_stomp rabbitmq_stomp</p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <h5 id="其中web_stomp和stomp插件官网介绍如下推荐开启">其中web_stomp和stomp插件官网介绍如下（推荐开启）：</h5>
+  <blockquote>
+    <p>rabbitmq_web_stomp
+https://www.rabbitmq.com/web-stomp.html
+rabbitmq_stomp
+https://www.rabbitmq.com/stomp.html</p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <h5 id="登陆mq">登陆MQ</h5>
+  <p>开启管理插件后，会看到有 15672 端口被监听</p>
+  <blockquote>
+    <p>netstat -tunlp 查看端口
+<img src="en-resource://database/4092:0" alt="d750418ddcb56396b55f247d239cfcba.png" /></p>
+    <h5 id="访问-15672-端口">访问 15672 端口</h5>
+    <p>http://10.100.24.51:15672/#/users
+<img src="en-resource://database/4094:0" alt="9ef92115a54422d00c47e7826991fbd0.png" /></p>
+    <h5 id="使用默认用户-guest密码guest登陆">使用默认用户： guest（密码：guest）登陆</h5>
+    <p>报错 User can only log in via localhost 
+<img src="en-resource://database/4096:0" alt="d9798db8f44cef2ca8b21979fe7ac159.png" /></p>
+    <h5 id="这个报错是因为新版本对-guest-用户做了限制只允许从localhost即服务器本地登陆官方解释httpswwwrabbitmqcomaccess-controlhtml">这个报错是因为新版本对 guest 用户做了限制，只允许从localhost（即服务器本地登陆），官方解释：https://www.rabbitmq.com/access-control.html</h5>
+    <p><img src="en-resource://database/4100:1" alt="a2bcd0ca52e75a4fb0a7fcca8af9c7b3.png" /></p>
+    <h5 id="可以通过修改配置文件开启远程访问">可以通过修改配置文件开启远程访问</h5>
+    <p><img src="en-resource://database/4102:0" alt="0515a8483edafb854b3f07e4e2d8f8b7.png" /></p>
+    <h5 id="也可通过新增管理用户的方式修改登陆用户">也可通过新增管理用户的方式，修改登陆用户</h5>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rabbitmqctl add_user admin admin
+rabbitmqctl set_user_tags admin administrator
+rabbitmqctl set_permissions -p / admin '.*' '.*' '.*'
+</code></pre></div>    </div>
+    <p><img src="en-resource://database/4104:0" alt="e345ded181b77f35aac4b4035d6c6cb1.png" /></p>
+  </blockquote>
+</blockquote>
+
+
+  </article>
+  
+  
+
+
+
+
+</div>
+
+        </div>
+        <div class="col-second">
+          <div class="col-box col-box-author">
+  <img class="avatar" src="/blog/image/avatar.png" alt="JonnYan">
+  <div class="col-box-title name">JonnYan</div>
+  <p>Operation and maintenance is also an art.</p>
+  <p class="contact">
+    
+    
+    
+    <a href="mailto:email@example.com">Email</a>
+    
+    <a href="https://github.com/jonn-yan">GitHub</a>
+    
+  </p>
+</div>
+
+<div class="col-box">
+  <div class="col-box-title">Newest Posts</div>
+  <ul class="post-list">
+    
+      <li><a class="post-link" href="/blog/archivers/2019-03-29-rabbitmq-1">Rabbitmq 单节点部署笔记</a></li>
+    
+      <li><a class="post-link" href="/blog/archivers/hello">Welcome to Jekyll and EasyBook</a></li>
+    
+      <li><a class="post-link" href="/blog/archivers/test">Style Test</a></li>
+    
+  </ul>
+</div>
+
+<div class="col-box post-toc hide">
+  <div class="col-box-title">TOC</div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+<div class="wrapper">
+&copy; 2019 JonnYan
+</div>
+</footer>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});</script>
+<script src="/blog/js/easybook.js"></script>
+
+
+  </body>
+
+</html>

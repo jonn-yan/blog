@@ -6,13 +6,277 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 14 Apr 2019 15:14:02 +0800</pubDate>
-    <lastBuildDate>Sun, 14 Apr 2019 15:14:02 +0800</lastBuildDate>
+    <pubDate>Sun, 14 Apr 2019 15:37:29 +0800</pubDate>
+    <lastBuildDate>Sun, 14 Apr 2019 15:37:29 +0800</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
+        <title>Archery 部署</title>
+        <description>&lt;h1 id=&quot;archery-部署&quot;&gt;Archery 部署&lt;/h1&gt;
+
+&lt;h4 id=&quot;系统版本&quot;&gt;系统版本&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Centos 6.5
+python 3.6
+pip 3.6
+Archery 1.4.5
+Mysql 5.6 （用 Percona server 56 代替）
+mongodb 4.0
+Redis 5.0.3&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;所有部署均在一台机器上进行，部署过程中不再说明&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;安装python36&quot;&gt;安装python3.6&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz
+cd Python-3.6.0
+./configure
+make &amp;amp;&amp;amp; make install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装pip36&quot;&gt;安装pip3.6&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py（或者浏览器直接访问 https://bootstrap.pypa.io/get-pip.py 将内容保存为 get-pip.py）
+python3.4 get-pip.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装-virtualenv&quot;&gt;安装 virtualenv&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip3.6 install virtualenv -i https://mirrors.ustc.edu.cn/pypi/web/simple/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;创建-python-虚拟环境&quot;&gt;创建 python 虚拟环境&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;virtualenv venv4archery --python=python3.6
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;切换-python-运行环境到虚拟环境&quot;&gt;切换 python 运行环境到虚拟环境&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source venv4archery/bin/activate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装系统依赖&quot;&gt;安装系统依赖&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source venv4archery/bin/activate
+yum -y install gcc gcc-c++ mysql-devel openldap-devel unixODBC-devel gettext
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装mysql-56&quot;&gt;安装Mysql 5.6&lt;/h4&gt;
+&lt;h4 id=&quot;注意&quot;&gt;注意&lt;/h4&gt;
+&lt;h6 id=&quot;-我在安装sqladvisor时用percona-server-替换了-mysql56&quot;&gt;&lt;em&gt;（ 我在安装SQLAdvisor时，用Percona Server 替换了 Mysql5.6）&lt;/em&gt;&lt;/h6&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;建议安装 Percona Server 作为数据库，在下边 SQLAdvisor 编译时，需要依赖Percona内的 libperconaserverclient_r.so
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;安装-repo&quot;&gt;安装 repo&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://repo.mysql.com/yum/mysql-5.6-community/el/6/x86_64/mysql-community-release-el6-5.noarch.rpm
+yum install -y yum-utils.noarch
+yum-config-manager --enable mysql56-community 
+yum install -y mysql-community-server.x86_64
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;下载-archery-145&quot;&gt;下载 Archery 1.4.5&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://github.com/hhyo/Archery/tree/v1.4.5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装-archery&quot;&gt;安装 Archery&lt;/h4&gt;
+&lt;h5 id=&quot;安装依赖&quot;&gt;安装依赖&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd Archery-1.4.5
+pip3.6 install -r requirements.txt -i https://mirrors.ustc.edu.cn/pypi/web/simple/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;数据库初始化&quot;&gt;数据库初始化&lt;/h4&gt;
+&lt;h5 id=&quot;创建数据库&quot;&gt;创建数据库&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database archery charset=utf8;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;初始化库&quot;&gt;初始化库&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source venv4archery/bin/activate
+cd Archery-1.4.5
+python3.6 manage.py makemigrations sql
+python3.6 manage.py migrate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;编译翻译文件&quot;&gt;编译翻译文件&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python3.6 manage.py compilemessages
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;创建管理用户&quot;&gt;创建管理用户&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python3.6 manage.py createsuperuser
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装mongodb40&quot;&gt;安装mongodb4.0&lt;/h4&gt;
+&lt;h6 id=&quot;创建--etcyumreposdmongodbrepo&quot;&gt;创建  /etc/yum.repos.d/mongodb.repo&lt;/h6&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[mongodb-org-4.0]
+name=MongoDB Repository
+baseurl=http://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.0/x86_64/
+gpgcheck=0
+enabled=1
+gpgkey=http://www.mongodb.org/static/pgp/server-4.0.asc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h6 id=&quot;安装mongo&quot;&gt;安装mongo&lt;/h6&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum install mongodb-org
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;创建-mongodb-用户和角色&quot;&gt;创建 mongodb 用户和角色&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mongo #进入mongo
+use admin
+db.createRole( { role: &quot;executeFunctions&quot;, privileges: [ { resource: { anyResource: true }, actions: [ &quot;anyAction&quot; ] } ], roles: [] } )  #创建角色
+use themis
+db.createUser({user: &quot;dbuser&quot;,pwd: &quot;dbuser&quot;,roles:[ { role: &quot;executeFunctions&quot;, db: &quot;admin&quot; } ]}) #创建用户
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;安装-redis-503&quot;&gt;安装 Redis-5.0.3&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://download.redis.io/releases/redis-5.0.3.tar.gz
+cd redis-5.0.3
+make install
+cd utils
+./install_server.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h6 id=&quot;启动redis&quot;&gt;启动Redis&lt;/h6&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/etc/init.d/redis_6379 start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;启动-archery&quot;&gt;启动 Archery&lt;/h4&gt;
+&lt;h5 id=&quot;runserver启动&quot;&gt;runserver启动&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source venv4archery/bin/activate
+python3.6 manage.py runserver 0.0.0.0:9123  --insecure 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;gunicornnginx启动&quot;&gt;Gunicorn+Nginx启动&lt;/h5&gt;
+&lt;h6 id=&quot;nginx配置示例&quot;&gt;nginx配置示例&lt;/h6&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server{
+        listen 9123; # 监听的端口
+        server_name archery;
+        client_max_body_size 20M; # 处理Request Entity Too Large
+        proxy_read_timeout 600s;  # 超时时间与Gunicorn超时时间设置一致，主要用于在线查询
+
+        location / {
+          proxy_pass http://127.0.0.1:8888;
+          proxy_set_header Host $host:9123; # 解决重定向404的问题，和listen端口保持一致，如果是docker则和宿主机映射端口保持一致
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /static {
+          alias /opt/archery/static; # 此处指向settings.py配置项STATIC_ROOT目录的绝对路径，用于nginx收集静态资源
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    } 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h6 id=&quot;启动&quot;&gt;启动&lt;/h6&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source venv4archery/bin/activate
+bash startup.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;inception-部署&quot;&gt;Inception 部署&lt;/h2&gt;
+&lt;h4 id=&quot;源码下载地址&quot;&gt;源码下载地址&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://github.com/jonn-yan/inception
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;安装编译环境&quot;&gt;安装编译环境&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum -y install gcc gcc-c++ automake autoconf libtool make
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;执行安装&quot;&gt;执行安装&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd inception-master
+sh nception_build.sh debug #debug 为编译创建的目录
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;新增配置文件&quot;&gt;新增配置文件&lt;/h5&gt;
+&lt;p&gt;vim debug/inc.cnf&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[inception]
+general_log=1
+general_log_file=inception.log
+port=6669
+socket=/tmp/inc.socket
+character-set-client-handshake=0
+character-set-server=utf8
+inception_remote_system_password=
+inception_remote_system_user=root
+inception_remote_backup_port=3307
+inception_remote_backup_host=127.0.0.1
+inception_support_charset=utf8,utf8mb4
+inception_osc_on=ON
+inception_osc_bin_dir=/usr/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;运行-inception&quot;&gt;运行 Inception&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd inception-master
+./debug/mysql/bin/Inception --defaults-file=./debug/inc.cnf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;配置-archery-中的-inception&quot;&gt;配置 Archery 中的 Inception&lt;/h5&gt;
+&lt;p&gt;系统配置 》配置项管理》选择操作（系统设置）
+&lt;img src=&quot;/blog/image/2019-04-15-archery-1-1.png&quot; alt=&quot;&quot; /&gt;
+&lt;strong&gt;&lt;em&gt;配置完成后即可进行SQL上线中的“SQL检测”，但会弹出报错窗口，报错如下：&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h5 id=&quot;报错处理&quot;&gt;报错处理&lt;/h5&gt;
+&lt;p&gt;Must start as begin statement* 或者 TypeError: ‘&amp;lt;’ not supported between instances of ‘NoneType’ and ‘int’Inception版本不正确导致
+&lt;strong&gt;&lt;em&gt;参考：https://github.com/hhyo/archery/wiki/faq#%E5%85%B6%E4%BB%96&lt;/em&gt;&lt;/strong&gt;
+可以按照下列方法修改，或者直接使用推荐版本或修改
+venv4archer/lib/python3.6/site-packages/MySQLdb/connections.py&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def show_warnings(self):
+&quot;&quot;&quot;Return detailed information about warnings as a
+sequence of tuples of (Level, Code, Message). This
+is only supported in MySQL-4.1 and up. If your server
+is an earlier version, an empty sequence is returned.&quot;&quot;&quot;
+if self._server_version[0] is None: return () #增加一行，解决语法SQL语法错误时弹出的报错信息
+if self._server_version &amp;lt; (4,1): return ()
+self.query(&quot;SHOW WARNINGS&quot;)
+r = self.store_result()
+warnings = r.fetch_row(0)
+return warnings
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;sqladvisor-20-部署&quot;&gt;SQLAdvisor-2.0 部署&lt;/h2&gt;
+&lt;h4 id=&quot;下载地址&quot;&gt;下载地址&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://github.com/jonn-yan/SQLAdvisor
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装依赖-1&quot;&gt;安装依赖&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum install install cmake libaio-devel libffi-devel glib2 glib2-devel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;安装percona-依赖&quot;&gt;安装percona 依赖&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;（需要卸载原安装的Mysql5.6，否则安装会提示冲突）&lt;/em&gt;&lt;/p&gt;
+  &lt;h5 id=&quot;sqladvisor-编译需要&quot;&gt;SQLAdvisor 编译需要&lt;/h5&gt;
+  &lt;h5 id=&quot;参考&quot;&gt;参考&lt;/h5&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;em&gt;https://github.com/Meituan-Dianping/SQLAdvisor/commit/2a7a3d879c42abf22202500b63dc74805064d116&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+yum localinstall -y percona-release-0.1-3.noarch.rpm
+yum install -y Percona-Server-server-56.x86_64
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h5 id=&quot;建立软链&quot;&gt;建立软链&lt;/h5&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ln -s /usr/lib64/libperconaserverclient_r.so.18 /usr/lib64/libperconaserverclient_r.so
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h5 id=&quot;编译依赖项sqlparser&quot;&gt;编译依赖项sqlparser&lt;/h5&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd SQLAdvisor-2.0
+cmake -DBUILD_CONFIG=mysql_release -DCMAKE_BUILD_TYPE=debug -DCMAKE_INSTALL_PREFIX=/usr/local/sqlparser ./
+make &amp;amp;&amp;amp; make install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h5 id=&quot;编译-sqladvisor&quot;&gt;编译 SQLAdvisor&lt;/h5&gt;
+    &lt;p&gt;&lt;strong&gt;在编译目录下生成 sqladvisor 可执行文件&lt;/strong&gt;&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd SQLAdvisor-2.0/sqladvisor
+cmake -DCMAKE_BUILD_TYPE=debug ./
+make
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h4 id=&quot;在-archery-中配置-sqladvisor-路径&quot;&gt;在 Archery 中配置 SQLadvisor 路径&lt;/h4&gt;
+    &lt;p&gt;系统配置 》配置项管理》选择操作（系统设置）中的SQL优化部分
+&lt;img src=&quot;/blog/image/2019-04-15-archery-1-2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+    &lt;h2 id=&quot;soar-部署&quot;&gt;Soar 部署&lt;/h2&gt;
+    &lt;h4 id=&quot;下载二进制包&quot;&gt;下载二进制包&lt;/h4&gt;
+    &lt;p&gt;wget https://github.com/XiaoMi/soar/releases/download/0.11.0/soar.linux-amd64 
+-O soar
+chmod a+x soar&lt;/p&gt;
+    &lt;h4 id=&quot;配置-archery-中-soar-配置&quot;&gt;配置 Archery 中 Soar 配置&lt;/h4&gt;
+    &lt;p&gt;系统配置 》配置项管理》选择操作（系统设置）中的SQL优化部分
+&lt;strong&gt;&lt;em&gt;其中 SOAR_TEST_DSN 为测试用的数据库&lt;/em&gt;&lt;/strong&gt;
+&lt;img src=&quot;/blog/image/2019-04-15-archery-1-3.png&quot; alt=&quot;&quot; /&gt;
+&lt;strong&gt;至此关键部署已经完成&lt;/strong&gt;&lt;/p&gt;
+    &lt;h5 id=&quot;其它-archery-详细配置请参考-httpsgithubcomhhyoarcherywiki&quot;&gt;其它 Archery 详细配置请参考 https://github.com/hhyo/Archery/wiki&lt;/h5&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;版权声明&quot;&gt;版权声明&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;h5 id=&quot;本文作者-jonnyan&quot;&gt;本文作者： JonnYan&lt;/h5&gt;
+  &lt;h5 id=&quot;本文链接-httpsjonn-yangithubioblogarchivers2019-04-15-archery-1&quot;&gt;本文链接： https://jonn-yan.github.io/blog/archivers/2019-04-15-archery-1&lt;/h5&gt;
+  &lt;h5 id=&quot;版权声明-本博客所有文章除特别声明外均采用-cc-by-nc-sa-40-许可协议转载请注明出处&quot;&gt;版权声明： 本博客所有文章除特别声明外，均采用 &lt;a href=&quot;https://creativecommons.org/licenses/by-nc-sa/4.0/&quot;&gt;CC BY-NC-SA 4.0&lt;/a&gt; 许可协议。转载请注明出处！&lt;/h5&gt;
+&lt;/blockquote&gt;
+</description>
+        <pubDate>Fri, 29 Mar 2019 10:10:00 +0800</pubDate>
+        <link>http://localhost:4000/blog/archivers/2019-04-15-archery-1</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/archivers/2019-04-15-archery-1</guid>
+        
+        
+        <category>OPS</category>
+        
+      </item>
+    
+      <item>
         <title>Rabbitmq 单节点部署笔记</title>
-        <description>&lt;h2 id=&quot;rabbitmq-单节点部署笔记&quot;&gt;Rabbitmq 单节点部署笔记&lt;/h2&gt;
+        <description>&lt;h1 id=&quot;rabbitmq-单节点部署笔记&quot;&gt;Rabbitmq 单节点部署笔记&lt;/h1&gt;
 
 &lt;blockquote&gt;
   &lt;h5 id=&quot;环境说明&quot;&gt;环境说明&lt;/h5&gt;

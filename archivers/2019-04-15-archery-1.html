@@ -267,6 +267,10 @@ yum install -y Percona-Server-server-56.x86_64
     <h5 id="建立软链">建立软链</h5>
     <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ln -s /usr/lib64/libperconaserverclient_r.so.18 /usr/lib64/libperconaserverclient_r.so
 </code></pre></div>    </div>
+    <h5 id="解决-percona-替换-mysql-后python-加载-mysqldb-模块报错">解决 percona 替换 Mysql 后，python 加载 MySQLDB 模块报错</h5>
+    <p>ImportError: /usr/lib64/libmysqlclient.so.18: version ‘libmysqlclient_18’ not found (required by /data/sql/venv4archery/lib/python3.6/site-packages/_mysql.cpython-36m-x86_64-linux-gnu.so)</p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install -y mysql-community-libs.x86_64
+</code></pre></div>    </div>
     <h5 id="编译依赖项sqlparser">编译依赖项sqlparser</h5>
     <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd SQLAdvisor-2.0
 cmake -DBUILD_CONFIG=mysql_release -DCMAKE_BUILD_TYPE=debug -DCMAKE_INSTALL_PREFIX=/usr/local/sqlparser ./

@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/blog/</link>
     <atom:link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 15 Apr 2019 17:09:45 +0800</pubDate>
-    <lastBuildDate>Mon, 15 Apr 2019 17:09:45 +0800</lastBuildDate>
+    <pubDate>Tue, 16 Apr 2019 10:51:10 +0800</pubDate>
+    <lastBuildDate>Tue, 16 Apr 2019 10:51:10 +0800</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
     
       <item>
@@ -229,6 +229,10 @@ yum install -y Percona-Server-server-56.x86_64
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
     &lt;h5 id=&quot;建立软链&quot;&gt;建立软链&lt;/h5&gt;
     &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ln -s /usr/lib64/libperconaserverclient_r.so.18 /usr/lib64/libperconaserverclient_r.so
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h5 id=&quot;解决-percona-替换-mysql-后python-加载-mysqldb-模块报错&quot;&gt;解决 percona 替换 Mysql 后，python 加载 MySQLDB 模块报错&lt;/h5&gt;
+    &lt;p&gt;ImportError: /usr/lib64/libmysqlclient.so.18: version ‘libmysqlclient_18’ not found (required by /data/sql/venv4archery/lib/python3.6/site-packages/_mysql.cpython-36m-x86_64-linux-gnu.so)&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum install -y mysql-community-libs.x86_64
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
     &lt;h5 id=&quot;编译依赖项sqlparser&quot;&gt;编译依赖项sqlparser&lt;/h5&gt;
     &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd SQLAdvisor-2.0

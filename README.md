@@ -1,3 +1,5 @@
+# 博客地址
+## https://jonn-yan.github.io/blog/
 # jekyll-theme-EasyBook
 
 Another Jekyll Blog Theme "EasyBook"
